@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,10 @@ class ProjectFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title'=>$this->faker->title,
+            'description'=>$this->faker->text,
+            'deadline'=>$this->faker->date(),
+            'status'=>Arr::random(['open','close'])
         ];
     }
 }
