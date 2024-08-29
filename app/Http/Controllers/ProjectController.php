@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -43,9 +45,14 @@ class ProjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Project $project)
     {
-        //
+        $users=User::all();
+        $cleints=Client::all();
+        return view('projects.edit')
+        ->with('project',$project)
+        ->with('clients',$cleints)
+        ->with('users',$users);
     }
 
     /**
