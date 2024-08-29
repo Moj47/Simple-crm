@@ -44,8 +44,7 @@
                     <th>Client</th>
                     <th>Deadline</th>
                     <th>Status</th>
-                    {{-- <th>Status</th>
-                    <th></th> --}}
+
                 </tr>
                 </thead>
                 <tbody>
@@ -56,19 +55,19 @@
                         <td>{{ $project->client->name }}</td>
                         <td>{{ $project->deadline }}</td>
                         <td>{{ $project->status }}</td>
-                        {{-- <td> --}}
-                            {{-- <a class="btn btn-sm btn-info" href="{{ route('projects.edit', $project) }}">
+                        <td>
+                            <a class="btn btn-sm btn-info" href="{{ route('projects.edit', $project) }}">
                                 Edit
-                            </a> --}}
-                            {{-- @can('delete')
+                            </a>
+                            @can('delete')
                                 <form action="{{ route('projects.destroy', $project) }}" method="POST"
                                       onsubmit="return confirm('Are your sure?');" style="display: inline-block;">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                     <input type="submit" class="btn btn-sm btn-danger" value="Delete">
                                 </form>
-                            @endcan --}}
-                        {{-- </td> --}}
+                            @endcan
+                       </td>
                     </tr>
                 @endforeach
                 </tbody>

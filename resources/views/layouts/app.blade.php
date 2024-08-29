@@ -19,7 +19,7 @@
     <div class="c-sidebar-brand d-lg-down-none">
         CRM
     </div>
-    {{-- @include('partials.menu') --}}
+    @include('partials.menu')
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent"
             data-class="c-sidebar-minimized"></button>
 </div>
