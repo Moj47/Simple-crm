@@ -58,9 +58,18 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Project $project)
     {
-        //
+        $request->validate([
+            'title'=>'required|string',
+            'description'=>'required|string',
+            'deadline'=>'required|date',
+            'user_id'=>'required|integer|exists:users,id',
+            'client_id'=>'required|integer|exists:clients,id',
+        ]);
+
+        $project->update($request->except(['_token','_method']));
+        return to_route('projects.index');
     }
 
     /**

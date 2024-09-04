@@ -23,6 +23,6 @@ class Project extends Model
     {
         return $this->belongsTo(Client::class);
     }
-    protected $fillabel=['title','description','deadline','status'];
+    protected $fillable=['title','description','deadline','status','user_id','client_id'];
 
 }

@@ -13,72 +13,72 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label class="required" for="title">Title</label>
-                            <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text"
+                            <input class="form-control @error('title') is-invalid @enderror '' }}" type="text"
                                    name="title" id="title" value="{{ old('title', $project->title) }}" required>
-                            @if($errors->has('title'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('title') }}
-                                </div>
-                            @endif
+                                   @error('title')
+                                   <div class="invalid-feedback">
+                                       {{ $message }}
+                                   </div>
+                               @enderror
                             <span class="help-block"> </span>
                         </div>
 
                         <div class="form-group">
                             <label class="required" for="description">Description</label>
-                            <textarea class="form-control {{ $errors->has('contact_email') ? 'is-invalid' : '' }}"
+                            <textarea class="form-control @error('description') is-invalid @enderror '' }}"
                                       rows="10" name="description"
                                       id="description">{{ old('description', $project->description) }}</textarea>
-                            @if($errors->has('contact_email'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('contact_email') }}
-                                </div>
-                            @endif
+                                      @error('description')
+                                      <div class="invalid-feedback">
+                                          {{ $message }}
+                                      </div>
+                                  @enderror
                             <span class="help-block"> </span>
                         </div>
 
                         <div class="form-group">
                             <label for="deadline">Deadline</label>
-                            <input class="form-control {{ $errors->has('deadline') ? 'is-invalid' : '' }}" type="date"
+                            <input class="form-control @error('deadline') is-invalid @enderror '' }}" type="date"
                                    name="deadline" id="deadline" value="{{ old('deadline', $project->deadline) }}">
-                            @if($errors->has('deadline'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('deadline') }}
-                                </div>
-                            @endif
+                                   @error('deadline')
+                                   <div class="invalid-feedback">
+                                       {{ $message }}
+                                   </div>
+                               @enderror
                             <span class="help-block"> </span>
                         </div>
 
                         <div class="form-group">
                             <label for="user_id">Assigned user</label>
-                            <select class="form-control {{ $errors->has('user_id') ? 'is-invalid' : '' }}"
+                            <select class="form-control @error('user_id') is-invalid @enderror '' "
                                     name="user_id" id="user_id" required>
                                 @foreach($users as $entry)
                                     <option
                                         value="{{ $entry->id }}" {{ (old('user_id') ? old('user_id') : $project->user->id ?? '') == $entry->id ? 'selected' : '' }}>{{ $entry->name }}</option>
                                 @endforeach
                             </select>
-                            @if($errors->has('user_id'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('user') }}
-                                </div>
-                            @endif
+                            @error('user_id')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
                             <span class="help-block"> </span>
                         </div>
 
                         <div class="form-group">
                             <label for="client_id">Assigned client</label>
-                            <select class="form-control {{ $errors->has('client_id') ? 'is-invalid' : '' }}"
+                            <select class="form-control  @error('client_id') is-invalid @enderror "
                                     name="client_id" id="client_id" required>
                                 @foreach($clients as $id => $entry)
                                     <option
                                         value="{{ $id }}" {{ (old('client_id') ? old('client_id') : $project->client->id ?? '') == $id ? 'selected' : '' }}>{{ $entry->name }}</option>
                                 @endforeach
                             </select>
-                            @if($errors->has('client_id'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('client_id') }}
-                                </div>
-                            @endif
+                            @error('client_id')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
                             <span class="help-block"> </span>
                         </div>
 
