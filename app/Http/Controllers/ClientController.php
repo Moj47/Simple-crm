@@ -25,7 +25,7 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+        return view('Clients.create');
     }
 
     /**
@@ -33,7 +33,15 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'name'=>'string|required',
+            'email'=>'string|email',
+            'phone' => 'required | phone_number',
+            'address'=>'string|required',
+        ]);
+        Client::create($request->except('_token'));
+        return redirect()->route('clients.index')->with('success','Client created successfully');
     }
 
     /**

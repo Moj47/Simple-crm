@@ -15,5 +15,5 @@ class Client extends Model
         return $this->hasMany(Project::class);
     }
 
-    protected $fillabel=['name','email','phone','address'];
+    protected $fillable=['name','email','phone','address'];
 }
