@@ -55,18 +55,26 @@ class ClientController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Client $client)
     {
-        //
+        return view('Clients.edit')->with('client',$client);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Client $client)
     {
-        //
+        $request->validate([
+            'name'=>'string|required',
+            'email'=>'string|email',
+            'phone' => 'required | phone_number',
+            'address'=>'string|required',
+        ]);
+        $client->update($request->except(['_token','_method']));
+        return redirect()->route('clients.index')->with('success','Client created successfully');
     }
+
 
     /**
      * Remove the specified resource from storage.
