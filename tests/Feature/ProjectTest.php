@@ -17,6 +17,14 @@ class ProjectTest extends TestCase
         $response->assertOk();
         $response->assertViewHas('projects');
     }
+    public function testCreateWithStoreMethod()
+    {
+        $project=Project::factory()->make();
+        $this->post(route('projects.store',$project),
+        $project->toArray())->assertRedirect(route('projects.index'));
+        $this->assertDatabaseHas('projects',$project->toArray());
+
+    }
     public function testProjectEditWithUpdateMethod()
     {
         $project=Project::factory()->create();
