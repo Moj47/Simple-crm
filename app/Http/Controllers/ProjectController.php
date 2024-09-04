@@ -23,7 +23,12 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        $users=User::all();
+        $clients=Client::all();
+        return view('projects.create')
+        ->with('users',$users)
+        ->with('clients',$clients)
+        ;
     }
 
     /**
@@ -31,7 +36,16 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title'=>'required|string',
+            'description'=>'required|string',
+            'deadline'=>'required|date',
+            'user_id'=>'required|integer|exists:users,id',
+            'client_id'=>'required|integer|exists:clients,id',
+        ]);
+
+        Project::Create($request->except(['_token','_method']));
+        return to_route('projects.index');
     }
 
     /**

@@ -3,18 +3,17 @@
 @section('content')
     <div class="row">
         <div class="col-md-8">
-            <form action="{{ route('projects.update', $project) }}" method="POST">
+            <form action="{{ route('projects.store') }}" method="POST">
                 @csrf
-                @method('PUT')
 
                 <div class="card">
-                    <div class="card-header">Edit project</div>
+                    <div class="card-header">Create project</div>
 
                     <div class="card-body">
                         <div class="form-group">
                             <label class="required" for="title">Title</label>
                             <input class="form-control @error('title') is-invalid @enderror '' }}" type="text"
-                                   name="title" id="title" value="{{ old('title', $project->title) }}" required>
+                                   name="title" id="title" value="{{ old('title') }}" required>
                                    @error('title')
                                    <div class="invalid-feedback">
                                        {{ $message }}
@@ -27,7 +26,7 @@
                             <label class="required" for="description">Description</label>
                             <textarea class="form-control @error('description') is-invalid @enderror '' }}"
                                       rows="10" name="description"
-                                      id="description">{{ old('description', $project->description) }}</textarea>
+                                      id="description">{{ old('description') }}</textarea>
                                       @error('description')
                                       <div class="invalid-feedback">
                                           {{ $message }}
@@ -39,7 +38,7 @@
                         <div class="form-group">
                             <label for="deadline">Deadline</label>
                             <input class="form-control @error('deadline') is-invalid @enderror '' }}" type="date"
-                                   name="deadline" id="deadline" value="{{ old('deadline', $project->deadline) }}">
+                                   name="deadline" id="deadline" value="{{ old('deadline') }}">
                                    @error('deadline')
                                    <div class="invalid-feedback">
                                        {{ $message }}
@@ -54,7 +53,7 @@
                                     name="user_id" id="user_id" required>
                                 @foreach($users as $entry)
                                     <option
-                                        value="{{ $entry->id }}" {{ (old('user_id') ? old('user_id') : $project->user->id ?? '') == $entry->id ? 'selected' : '' }}>{{ $entry->name }}</option>
+                                        value="{{ $entry->id }}" {{ old('user_id')  == $entry->id ? 'selected' : '' }}> {{ $entry->name }}</option>
                                 @endforeach
                             </select>
                             @error('user_id')
@@ -71,7 +70,7 @@
                                     name="client_id" id="client_id" required>
                                 @foreach($clients as $id => $entry)
                                     <option
-                                        value="{{ $project->client->id }}" {{ (old('client_id') ? old('client_id') : $project->client->id ?? '') == $id ? 'selected' : '' }}>{{ $entry->name }}</option>
+                                        value="{{ $entry->id }}" {{ (old('client_id')) == $id ? 'selected' : '' }}>{{ $entry->name }}</option>
                                 @endforeach
                             </select>
                             @error('client_id')
