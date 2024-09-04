@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -9,9 +11,13 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+        public function index()
     {
-        //
+        $clients=Client::paginate(10);
+        $users=User::all();
+        return view('Clients.index')
+        ->with('users',$users)
+        ->with('clients',$clients);
     }
 
     /**
