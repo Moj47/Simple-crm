@@ -22,7 +22,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+    return view('Users.create');
     }
 
     /**
@@ -30,7 +30,14 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'=>'required|string',
+            'email'=>'required|email',
+            'address'=>'required|string',
+            'phone_number'=>'required|phone_number',
+        ]);
+        $user=array_merge(['password'=>'password'],$request->except(['_token']));
+        User::create($user);
     }
 
     /**
@@ -44,17 +51,26 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        //
+        return view('Users.edit')
+        ->with('user',$user);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request,User $user)
     {
-        //
+        $request->validate([
+            'name'=>'required|string',
+            'email'=>'required|email',
+            'address'=>'required|string',
+            'phone_number'=>'required|phone_number',
+        ]);
+        $data=array_merge(['password'=>'password'],$request->except(['_token','_method']));
+        $user->update($data);
+        return to_route('users.index');
     }
 
     /**

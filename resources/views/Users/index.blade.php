@@ -29,10 +29,11 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>name</th>
-                    <th>Last name</th>
+                    <th>Name</th>
                     <th>Email</th>
-                    <th>Role</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+
                     {{-- @if ($withDeleted)
                         <th>Deleted at</th> --}}
                     {{-- @endif --}}
@@ -44,8 +45,9 @@
                     <tr>
                         <td>{{ $user->id }}</td>
                         <td>{{ $user->name }}</td>
-                        <td>{{ $user->last_name }}</td>
                         <td>{{ $user->email }}</td>
+                        <td>{{ $user->address }}</td>
+                        <td>{{ $user->phone_number }}</td>
                         {{-- <td>
                             @foreach($user->roles as $role)
                                 {{ $role->name }}
