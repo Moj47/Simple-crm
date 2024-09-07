@@ -64,17 +64,34 @@ class TaskController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Task $task)
     {
-        //
+        $users=User::all();
+        $clients=Client::all();
+        $projects=Project::all();
+        return view('tasks.edit')
+        ->with('task',$task)
+        ->with('clients',$clients)
+        ->with('users',$users)
+        ->with('projects',$projects);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Task $task)
     {
-        //
+        $request->validate([
+            'name'=>'required|string',
+            'description'=>'required|string',
+            'deadline'=>'required|date',
+            'user_id'=>'required|integer|exists:users,id',
+            'client_id'=>'required|integer|exists:clients,id',
+            'project_id'=>'required|integer|exists:projects,id',
+            'status' => 'required|in:1,2',
+        ]);
+        $task->update($request->except(['_token','_method']));
+        return to_route('tasks.index');
     }
 
     /**
