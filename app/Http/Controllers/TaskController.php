@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
+use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -22,7 +25,13 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        $users=User::all();
+        $clients=Client::all();
+        $projects=Project::all();
+        return view('tasks.create')
+        ->with('clients',$clients)
+        ->with('users',$users)
+        ->with('projects',$projects);
     }
 
     /**
@@ -30,7 +39,17 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       $request->validate([
+        'name'=>'required|string',
+        'description'=>'required|string',
+        'deadline'=>'required|date',
+        'user_id'=>'required|integer|exists:users,id',
+        'client_id'=>'required|integer|exists:clients,id',
+        'project_id'=>'required|integer|exists:projects,id',
+        'status' => 'required|in:1,2',
+    ]);
+    $task=Task::create($request->except('_token'));
+    return to_route('tasks.index');
     }
 
     /**
