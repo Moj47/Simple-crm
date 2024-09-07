@@ -1,13 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
+@can('create-project')
     <div style="margin-bottom: 10px;" class="row">
+
         <div class="col-lg-12">
             <a class="btn btn-success" href="{{ route('projects.create') }}">
                 Create project
             </a>
         </div>
     </div>
+    @endcan
 
     <div class="card">
         <div class="card-header">Projects list</div>
@@ -56,9 +59,12 @@
                         <td>{{ $project->deadline }}</td>
                         <td>{{ $project->status }}</td>
                         <td>
+                            @can('update-project')
+
                             <a class="btn btn-sm btn-info" href="{{ route('projects.edit', $project) }}">
                                 Edit
                             </a>
+                            @endcan
                             @can('delete')
                                 <form action="{{ route('projects.destroy', $project) }}" method="POST"
                                       onsubmit="return confirm('Are your sure?');" style="display: inline-block;">

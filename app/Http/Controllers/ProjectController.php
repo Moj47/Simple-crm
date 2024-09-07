@@ -61,6 +61,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
+        $this->authorize('update-project');
         $users=User::all();
         $cleints=Client::all();
         return view('projects.edit')
@@ -74,6 +75,7 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+        $this->authorize('update-project');
         $request->validate([
             'title'=>'required|string',
             'description'=>'required|string',
