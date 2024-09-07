@@ -38,7 +38,35 @@
                 data-class="c-sidebar-lg-show" responsive="true">
             <i class="fas fa-fw fa-bars"></i>
         </button>
-
+        <ul class="c-header-nav d-md-down-none">
+            @if(Auth::guest())
+                <li class="c-header-nav-item px-3">
+                    <a class="c-header-nav-link" href="{{ route('login') }}">
+                        <i class="fas fa-fw fa-lock"></i> Login
+                    </a>
+                </li>
+                <li class="c-header-nav-item px-3">
+                    <a class="c-header-nav-link" href="{{ route('register') }}">
+                        <i class="fas fa-fw fa-user-plus"></i> Register
+                    </a>
+                </li>
+            @else
+                <li class="c-header-nav-item dropdown">
+                    <a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                       aria-expanded="false">
+                        <i class="fas fa-fw fa-user"></i> {{ Auth::user()->name }}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right pt-0">
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                           onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
+                            <i class="fas fa-fw fa-lock"></i> Logout
+                        </a>
+                    </div>
+                </li>
+                <form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                </form>
+            @endif
         {{-- @include('partials.user-dropdown') --}}
     </header>
     <div class="c-body">
@@ -48,9 +76,9 @@
                     @yield('content')
                 </div>
             </div>
-            {{-- <form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
+            <form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
                 {{ csrf_field() }}
-            </form> --}}
+            </form>
         </main>
         <footer class="c-footer">
             <div><a href="https://coreui.io">CoreUI</a> © 2020 creativeLabs.</div>
