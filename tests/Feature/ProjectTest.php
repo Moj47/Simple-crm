@@ -90,4 +90,16 @@ class ProjectTest extends TestCase
         ->assertRedirect();
         $this->assertDatabaseMissing($project);
     }
+    public function testWhereUserHasNotAnyPermission()
+    {
+        $project=Project::factory()->create();
+
+        $user=User::factory()->create();
+        $this->actingAs($user)->delete(route('projects.destroy',$project))->assertStatus(403);
+        $this->actingAs($user)->get(route('projects.edit',$project))->assertStatus(403);
+        $this->actingAs($user)->delete(route('projects.force-delete',$project))->assertStatus(403);
+        $this->actingAs($user)->get(route('projects.create'))->assertStatus(403);
+
+
+    }
 }

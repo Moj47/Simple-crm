@@ -32,6 +32,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
+        $this->authorize('create-project');
         $users=User::all();
         $clients=Client::all();
         return view('projects.create')
@@ -45,6 +46,7 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create-project');
         $request->validate([
             'title'=>'required|string',
             'description'=>'required|string',
