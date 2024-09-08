@@ -66,7 +66,7 @@
                                 Edit
                             </a>
                             @endcan
-                            @can('delete')
+                            @can('delete-project')
                                 <form action="{{ route('projects.destroy', $project) }}" method="POST"
                                       onsubmit="return confirm('Are your sure?');" style="display: inline-block;">
                                     <input type="hidden" name="_method" value="DELETE">
@@ -74,8 +74,18 @@
                                     <input type="submit" class="btn btn-sm btn-danger" value="Delete">
                                 </form>
                             @endcan
-                       </td>
-                    </tr>
+                                @can('restore-project')
+
+                                @if (!$project->deleted_at==null)
+                                <form action="{{ route('projects.restore', $project->id) }}" method="POST"
+                                    onsubmit="return confirm('Are your sure?');" style="display: inline-block;">
+                                    @csrf
+                                    <input type="submit" class="btn btn-sm btn-warning" value="Restore">
+                                </form>
+                                @endcan
+                                @endif
+                            </td>
+                        </tr>
                 @endforeach
                 </tbody>
             </table>

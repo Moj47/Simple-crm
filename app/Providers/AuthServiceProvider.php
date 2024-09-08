@@ -26,10 +26,13 @@ class AuthServiceProvider extends ServiceProvider
             return $user->type=='admin';
         });
 
-        Gate::define('delete', function (User $user) {
+        Gate::define('delete-project', function (User $user) {
             return $user->type==='admin';
         });
         Gate::define('create-project',function(User $user){
+            return $user->type=='admin';
+        });
+        Gate::define('restore-project',function(User $user){
             return $user->type=='admin';
         });
     }
