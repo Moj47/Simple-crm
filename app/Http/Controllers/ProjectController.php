@@ -102,7 +102,6 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        // dd($project = Project::withTrashed()->find($project->id));
 
         $this->authorize('delete-project');
         try {
@@ -121,5 +120,20 @@ class ProjectController extends Controller
         $project=Project::onlyTrashed()->find($id);
         $project->restore();
         return back();
+    }
+
+    public function forcedelete($id)
+    {
+        $project=Project::onlyTrashed()->find($id);
+        $this->authorize('delete-project');
+        try {
+            $project->forceDelete();
+        } catch (\Illuminate\Database\QueryException $e) {
+            if($e->getCode() === '23000') {
+               return redirect()->back()->with('status', 'Project belongs to task. Cannot delete.');
+           }
+        }
+        return back();
+
     }
 }

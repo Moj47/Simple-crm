@@ -67,7 +67,14 @@
                             </a>
                             @endcan
                             @can('delete-project')
-                                <form action="{{ route('projects.destroy', $project) }}" method="POST"
+                                <form
+                                @if ($project->deleted_at==null)
+                                action="{{ route('projects.destroy', $project) }}" method="POST"
+                                @else
+                                action="{{ route('projects.force-delete', $project->id) }}" method="POST"
+
+                                @endif
+
                                       onsubmit="return confirm('Are your sure?');" style="display: inline-block;">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -82,8 +89,8 @@
                                     @csrf
                                     <input type="submit" class="btn btn-sm btn-warning" value="Restore">
                                 </form>
-                                @endcan
                                 @endif
+                            @endcan
                             </td>
                         </tr>
                 @endforeach
