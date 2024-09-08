@@ -12,10 +12,19 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $porjects=Project::paginate(20);
-        return view('projects.index')->with('projects',$porjects);
+        $filter = $request->get('status');
+        if($filter=='All' || $filter==null)
+        {
+            $porjects=Project::paginate(20);
+            return view('projects.index')->with('projects',$porjects);
+        }
+        elseif($filter=='deleted')
+        {
+            $porjects=Project::onlyTrashed()->paginate(20);
+            return view('projects.index')->with('projects',$porjects);
+        }
     }
 
     /**
@@ -91,8 +100,20 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Project $project)
     {
-        //
+        // dd($project = Project::withTrashed()->find($project->id));
+
+        $this->authorize('delete');
+        try {
+            $project = Project::onlyTrashed()->find($project->id);
+            $project->forceDelete();
+        } catch (\Illuminate\Database\QueryException $e) {
+            if($e->getCode() === '23000') {
+               return redirect()->back()->with('status', 'Project belongs to task. Cannot delete.');
+           }
+        }
+
+        return redirect()->route('projects.index');
     }
 }

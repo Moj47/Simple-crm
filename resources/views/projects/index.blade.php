@@ -15,29 +15,30 @@
     <div class="card">
         <div class="card-header">Projects list</div>
 
-        {{-- <div class="card-body">
+        <div class="card-body">
             @if (session('status'))
                 <div class="alert alert-danger" role="alert">
                     {{ session('status') }}
-                </div> --}}
-            {{-- @endif --}}
+                </div>
+            @endif
 
-            {{-- <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-end">
                 <form action="{{ route('projects.index') }}" method="GET">
                     <div class="form-group row">
                         <label for="status" class="col-form-label">Status:</label>
                         <div class="col-sm-8">
                             <select class="form-control" name="status" id="status" onchange="this.form.submit()">
-                                <option value="all" {{ request('filter') == 'all' ? 'selected' : '' }}>All</option>
-                                @foreach(App\Models\Project::STATUS as $status)
+                                <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>All</option>
+                                <option value="deleted" {{ request('status') == 'deleted' ? 'selected' : '' }}>deleted</option>
+                                {{-- @foreach(App\Models\Project::STATUS as $status)
                                     <option
                                         value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>{{ ucfirst($status) }}</option>
-                                @endforeach
+                                @endforeach --}}
                             </select>
                         </div>
                     </div>
                 </form>
-            </div> --}}
+            </div>
 
             <table class="table table-responsive-sm table-striped">
                 <thead>
