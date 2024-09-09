@@ -14,7 +14,7 @@ class ProjectTest extends TestCase
   use RefreshDatabase;
     public function testProjectIndexShowAllProjects(): void
     {
-        $user=User::factory()->create(['type'=>'admin']);
+        $user=User::factory()->create();
         $response=$this->actingAs($user)
         ->get(route('projects.index'));
         $response->assertOk();
