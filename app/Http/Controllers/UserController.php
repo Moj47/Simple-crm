@@ -22,7 +22,8 @@ class UserController extends Controller
      */
     public function create()
     {
-    return view('Users.create');
+        $this->authorize('createUser',auth()->user());
+        return view('Users.create');
     }
 
     /**
@@ -30,6 +31,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('createuser',auth()->user());
+
         $request->validate([
             'name'=>'required|string',
             'email'=>'required|email',
@@ -38,6 +41,7 @@ class UserController extends Controller
         ]);
         $user=array_merge(['password'=>'password'],$request->except(['_token']));
         User::create($user);
+        return to_route('users.index');
     }
 
     /**
@@ -53,6 +57,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $this->authorize('edituser',auth()->user());
+
         return view('Users.edit')
         ->with('user',$user);
     }
@@ -62,6 +68,8 @@ class UserController extends Controller
      */
     public function update(Request $request,User $user)
     {
+        $this->authorize('edituser',auth()->user());
+
         $request->validate([
             'name'=>'required|string',
             'email'=>'required|email',
@@ -78,6 +86,7 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->authorize('deleteuser',auth()->user());
+
     }
 }
