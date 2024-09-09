@@ -9,12 +9,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/',function () {
     return redirect(route('projects.index'));
 });
-Route::resource('projects',ProjectController::class);
-Route::post('projects/restore/{id}',[ProjectController::class,'restore'])->name('projects.restore');
 
-Route::resource('clients',ClientController::class);
-Route::resource('tasks',TaskController::class);
-Route::resource('users',UserController::class);
+Route::group(['middleware'=>'auth'],function(){
+
+    Route::resource('projects',ProjectController::class);
+    Route::post('projects/restore/{id}',[ProjectController::class,'restore'])->name('projects.restore');
+    Route::delete('projects/delete/{id}',[ProjectController::class,'forcedelete'])->name('projects.force-delete');
+
+    Route::resource('clients',ClientController::class);
+    Route::resource('tasks',TaskController::class);
+    Route::resource('users',UserController::class);
+});
+
 
 Auth::routes();
 
