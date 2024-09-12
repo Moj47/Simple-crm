@@ -66,7 +66,7 @@
                                 Edit
                             </a>
                             @endcan
-                            @can('delete-project',$project)
+                            @can('force-delete-project',$project)
                                 <form
                                 @if ($project->deleted_at==null)
                                 action="{{ route('projects.destroy', $project) }}" method="POST"

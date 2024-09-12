@@ -30,8 +30,12 @@ class AuthServiceProvider extends ServiceProvider
             return $user->type=='admin'||$project->user_id==$user->id;
         });
 
-        Gate::define('delete-project', function (User $user,Project $project) {
-            return $user->type=='admin'||$project->user_id==$user->id;
+        Gate::define('delete-project', function (User $user, Project $project) {
+            return $user->type == 'admin' || $project->user_id == $user->id;
+        });
+        Gate::define('force-delete-project', function (User $user, $project) {
+
+            return $user->type == 'admin' || $project->user_id == $user->id;
         });
         Gate::define('create-project',function(User $user){
             return $user->type=='admin';

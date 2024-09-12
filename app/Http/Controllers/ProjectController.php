@@ -15,7 +15,7 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         $filter = $request->get('status');
-        if($filter=='All' || $filter==null)
+        if($filter=='all' || $filter==null)
         {
             $porjects=Project::paginate(20);
             return view('projects.index')->with('projects',$porjects);
@@ -96,7 +96,7 @@ class ProjectController extends Controller
         ]);
 
         $project->update($request->except(['_token','_method']));
-        return to_route('projects.index');
+        return redirect()->route('projects.index');
     }
 
     /**
@@ -104,7 +104,6 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-
         $this->authorize('delete-project',$project);
         try {
             $project->delete();
@@ -127,8 +126,8 @@ class ProjectController extends Controller
 
     public function forcedelete($id)
     {
-        $project=Project::onlyTrashed()->find($id);
-        $this->authorize('delete-project',$project);
+        $project=Project::onlyTrashed()->findOrFail($id);
+        $this->authorize('force-delete-project', $project);
         try {
             $project->forceDelete();
         } catch (\Illuminate\Database\QueryException $e) {

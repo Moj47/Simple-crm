@@ -97,11 +97,24 @@ class ProjectTest extends TestCase
         $project=Project::factory()->create();
 
         $user=User::factory()->create();
+        $deletedProject=Project::factory()->create(['deleted_at'=>date(now())]);
         $this->actingAs($user)->delete(route('projects.destroy',$project))->assertStatus(403);
         $this->actingAs($user)->get(route('projects.edit',$project))->assertStatus(403);
-        $this->actingAs($user)->delete(route('projects.force-delete',$project))->assertStatus(403);
+        $this->actingAs($user)->delete(route('projects.force-delete',$deletedProject->id))->assertStatus(403);
         $this->actingAs($user)->get(route('projects.create'))->assertStatus(403);
+    }
+    public function testUserCanUpdateAndDeleteItselfProjcet()
+    {
+        $user=User::factory()->create();
+        $project=Project::factory()->create(['user_id'=>$user->id]);
+        $data=Project::factory()->make(['user_id'=>$user->id]);
+        $this->actingAs($user)->put(route('projects.update',$project),$data->toArray())
+        ->assertRedirect();
+        $this->assertDatabaseHas('projects',$data->toArray());
 
+        $this->actingAs($user)->delete(route('projects.destroy',$project->id))
+        ->assertRedirect();
+        $this->assertSoftDeleted('projects',$data->toArray());
 
     }
 }
