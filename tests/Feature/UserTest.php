@@ -47,4 +47,29 @@ class UserTest extends TestCase
         $this->assertDatabaseHas('users',$data->toArray());
 
     }
+    public function testWhereUserHasNotAnyPermission()
+    {
+        $user1=User::factory()->create();
+
+        $user=User::factory()->create();
+        $this->actingAs($user)->delete(route('users.destroy',$user1))->assertStatus(403);
+        $this->actingAs($user)->get(route('users.edit',$user1))->assertStatus(403);
+        // $this->actingAs($user)->delete(route('projects.force-delete',$user1))->assertStatus(403);
+        $this->actingAs($user)->get(route('users.create'))->assertStatus(403);
+
+
+    }
+    public function testWhereUserIsNotAdminButCanEditItselfInformation()
+    {
+        $user1=User::factory()->create();
+        $data=User::factory()->make(['phone_number'=>'09193896557']);
+        $this->actingAs($user1)->get(route('users.edit',$user1))->assertViewIs('Users.edit');
+        $this->actingAs($user1)->put(route('users.update',$user1),$data->toArray())->assertRedirect();
+        $this->assertDatabaseHas('users',[
+            'name'=>$data->name,
+            'phone_number'=>$data->phone_number
+        ]);
+
+
+    }
 }

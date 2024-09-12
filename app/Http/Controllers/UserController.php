@@ -57,10 +57,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $this->authorize('edituser',auth()->user());
-
-        return view('Users.edit')
-        ->with('user',$user);
+        if(auth()->user()->id==$user->id ||$this->authorize('edituser',auth()->user()) );
+        {
+            return view('Users.edit')
+            ->with('user',$user);
+        }
     }
 
     /**
@@ -68,17 +69,19 @@ class UserController extends Controller
      */
     public function update(Request $request,User $user)
     {
-        $this->authorize('edituser',auth()->user());
+        if(auth()->user()->id==$user->id ||$this->authorize('edituser',auth()->user()) );
+        {
+            $request->validate([
+                'name'=>'required|string',
+                'email'=>'required|email',
+                'address'=>'required|string',
+                'phone_number'=>'required|phone_number',
+            ]);
+            $data=array_merge(['password'=>'password'],$request->except(['_token','_method']));
+            $user->update($data);
+            return to_route('users.index');
+        }
 
-        $request->validate([
-            'name'=>'required|string',
-            'email'=>'required|email',
-            'address'=>'required|string',
-            'phone_number'=>'required|phone_number',
-        ]);
-        $data=array_merge(['password'=>'password'],$request->except(['_token','_method']));
-        $user->update($data);
-        return to_route('users.index');
     }
 
     /**
