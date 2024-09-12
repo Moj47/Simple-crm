@@ -72,7 +72,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        $this->authorize('update-project');
+        $this->authorize('update-project',$project);
         $users=User::all();
         $cleints=Client::all();
         return view('projects.edit')
@@ -86,7 +86,7 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        $this->authorize('update-project');
+        $this->authorize('update-project',$project);
         $request->validate([
             'title'=>'required|string',
             'description'=>'required|string',
@@ -105,7 +105,7 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
 
-        $this->authorize('delete-project');
+        $this->authorize('delete-project',$project);
         try {
             $project->delete();
         } catch (\Illuminate\Database\QueryException $e) {
@@ -118,7 +118,8 @@ class ProjectController extends Controller
     }
     public function restore($id)
     {
-        $this->authorize('restore-project');
+        $project=Project::onlyTrashed()->find($id);
+        $this->authorize('restore-project',$project);
         $project=Project::onlyTrashed()->find($id);
         $project->restore();
         return back();
@@ -127,7 +128,7 @@ class ProjectController extends Controller
     public function forcedelete($id)
     {
         $project=Project::onlyTrashed()->find($id);
-        $this->authorize('delete-project');
+        $this->authorize('delete-project',$project);
         try {
             $project->forceDelete();
         } catch (\Illuminate\Database\QueryException $e) {

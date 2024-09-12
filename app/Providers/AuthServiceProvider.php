@@ -26,18 +26,18 @@ class AuthServiceProvider extends ServiceProvider
         Gate::policy(User::class, UserPolicy::class);
 
 
-        Gate::define('update-project', function (User $user) {
-            return $user->type=='admin';
+        Gate::define('update-project', function (User $user,Project $project) {
+            return $user->type=='admin'||$project->user_id==$user->id;
         });
 
-        Gate::define('delete-project', function (User $user) {
-            return $user->type==='admin';
+        Gate::define('delete-project', function (User $user,Project $project) {
+            return $user->type=='admin'||$project->user_id==$user->id;
         });
         Gate::define('create-project',function(User $user){
             return $user->type=='admin';
         });
-        Gate::define('restore-project',function(User $user){
-            return $user->type=='admin';
+        Gate::define('restore-project',function(User $user,Project $project){
+            return $user->type=='admin'||$project->user_id==$user->id;
         });
     }
 }

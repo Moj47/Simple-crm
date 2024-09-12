@@ -60,13 +60,13 @@
                         <td>{{ $project->deadline }}</td>
                         <td>{{ $project->status }}</td>
                         <td>
-                            @can('update-project')
+                            @can('update-project',$project)
 
                             <a class="btn btn-sm btn-info" href="{{ route('projects.edit', $project) }}">
                                 Edit
                             </a>
                             @endcan
-                            @can('delete-project')
+                            @can('delete-project',$project)
                                 <form
                                 @if ($project->deleted_at==null)
                                 action="{{ route('projects.destroy', $project) }}" method="POST"
@@ -81,7 +81,7 @@
                                     <input type="submit" class="btn btn-sm btn-danger" value="Delete">
                                 </form>
                             @endcan
-                                @can('restore-project')
+                                @can('restore-project',$project)
 
                                 @if (!$project->deleted_at==null)
                                 <form action="{{ route('projects.restore', $project->id) }}" method="POST"
