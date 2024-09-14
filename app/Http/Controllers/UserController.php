@@ -10,11 +10,21 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users=User::paginate(10);
+        $filter=$request->get(key:'deleted');
+        if( $filter==null ||$filter=='false')
+        {
+            $users=User::paginate(10);
+
+        }
+        if( $filter=='true')
+        {
+            $users=User::onlyTrashed()->paginate(10);
+        }
         return view('users.index')
         ->with('users',$users);
+
     }
 
     /**
@@ -87,9 +97,31 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
         $this->authorize('deleteuser',auth()->user());
+        try {
+            $user->delete();
+        } catch (\Illuminate\Database\QueryException $e) {
+            if($e->getCode() === '23000') {
+               return redirect()->back()->with('status', 'User belongs to task. Cannot delete.');
+           }
+        }
+        return redirect()->route('users.index');
+
+    }
+    public function forceDelete($id)
+    {
+        $user=User::onlyTrashed()->find($id);
+        $this->authorize('deleteuser',auth()->user());
+        try {
+            $user->forceDelete();
+        } catch (\Illuminate\Database\QueryException $e) {
+            if($e->getCode() === '23000') {
+               return redirect()->back()->with('status', 'User belongs to task. Cannot delete.');
+           }
+        }
+        return redirect()->route('users.index');
 
     }
 }

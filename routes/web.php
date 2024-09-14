@@ -17,8 +17,12 @@ Route::group(['middleware'=>'auth'],function(){
     Route::delete('projects/delete/{id}',[ProjectController::class,'forcedelete'])->name('projects.force-delete');
 
     Route::resource('clients',ClientController::class);
+
     Route::resource('tasks',TaskController::class);
+
     Route::resource('users',UserController::class);
+    Route::delete('users/delete/{id}',[UserController::class,'forcedelete'])->name('users.force-delete');
+
 });
 
 
