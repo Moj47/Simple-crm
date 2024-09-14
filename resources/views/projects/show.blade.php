@@ -23,9 +23,9 @@
                 <div class="card-header">Assigned user</div>
 
                 <div class="card-body">
-                    <p class="mb-0">{{ $project->user->name }}</p>
-                    <p class="mb-0">{{ $project->user->email }}</p>
-                    <p class="mb-0">{{ $project->user->phone }}</p>
+                    <td>{{ optional($project->user)->name }}</td>
+                    <td>{{ optional($project->user)->email }}</td>
+                    <td>{{ optional($project->user)->phone }}</td>
                 </div>
             </div>
         </div>
@@ -74,8 +74,8 @@
                                     <tr>
                                         {{-- <td><a href="{{ route('tasks.show', $task) }}">{{ $task->title }}</a></td> --}}
                                         <td>{{ $task->name }}</td>
-                                        <td>{{ $task->user->name }}</td>
-                                        <td>{{ $task->client->name }}</td>
+                                        <td>{{ optional($project->user)->name }}</td>
+                                        <td>{{ optional($project->client)->name }}</td>
                                         <td>{{ $task->deadline }}</td>
                                         <td>{{ $task->status }}</td>
                                         <td>

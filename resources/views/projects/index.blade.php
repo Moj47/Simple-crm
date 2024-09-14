@@ -55,8 +55,8 @@
                 @foreach($projects as $project)
                     <tr>
                         <td><a href="{{ route('projects.show', $project) }}">{{ $project->title }}</a></td>
-                        <td>{{ $project->user->name }}</td>
-                        <td>{{ $project->client->name }}</td>
+                        <td>{{ optional($project->user)->name }}</td>
+                        <td>{{ optional($project->client)->name }}</td>
                         <td>{{ $project->deadline }}</td>
                         <td>{{ $project->status }}</td>
                         <td>
