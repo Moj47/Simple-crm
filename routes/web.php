@@ -1,16 +1,19 @@
 <?php
 
-use App\Http\Controllers\ClientController;
-use App\Http\Controllers\ProjectController;
+use App\Http\Middleware\NullEmail;
+use App\Http\Middleware\Verifyemail;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\VerifyController;
+use App\Http\Controllers\ProjectController;
 
 Route::get('/',function () {
     return redirect(route('projects.index'));
 });
 
-Route::group(['middleware'=>'auth'],function(){
+Route::group(['middleware'=>['auth',Verifyemail::class]],function(){
 
     Route::resource('projects',ProjectController::class);
     Route::post('projects/restore/{id}',[ProjectController::class,'restore'])->name('projects.restore');
@@ -22,7 +25,7 @@ Route::group(['middleware'=>'auth'],function(){
 
     Route::resource('users',UserController::class);
     Route::delete('users/delete/{id}',[UserController::class,'forcedelete'])->name('users.force-delete');
-
+    Route::post(uri: 'users/restore/{id}', action: [UserController::class,'restore'])->name('users.restore');
 });
 
 
@@ -30,4 +33,11 @@ Auth::routes();
 
 Route::get('/home',function () {
     return redirect(route('projects.index'));
+});
+
+Route::group(['middleware'=>['auth',NullEmail::class]] ,function(){
+
+    Route::get('verify',[VerifyController::class,'send'])->name('send');
+    Route::post('verify',[VerifyController::class,'verify'])->name('verify');
+    Route::get('click-on-verify/{email}',[VerifyController::class,'click'])->name('click');
 });
