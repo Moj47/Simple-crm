@@ -124,4 +124,11 @@ class UserController extends Controller
         return redirect()->route('users.index');
 
     }
+    public function restore($id)
+    {
+        $this->authorize('restoreUser',auth()->user());
+        $user=User::onlyTrashed()->find($id);
+        $user->restore();
+        return back();
+    }
 }

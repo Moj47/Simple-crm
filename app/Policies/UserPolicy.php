@@ -21,4 +21,8 @@ class UserPolicy
     {
         return $user->type=='admin';
     }
+    public function restoreUser(User $user)
+    {
+        return $user->type=='admin';
+    }
 }

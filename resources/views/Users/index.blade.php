@@ -96,6 +96,16 @@
                                     @endif
                                 </form>
                                 @endcan
+                                @can('restoreUser',$authed  )
+
+                                @if (!$user->deleted_at==null)
+                                <form action="{{ route('users.restore', $user->id) }}" method="POST"
+                                    onsubmit="return confirm('Are your sure?');" style="display: inline-block;">
+                                    @csrf
+                                    <input type="submit" class="btn btn-sm btn-warning" value="Restore">
+                                </form>
+                                @endif
+                            @endcan
                             </td>
                         </tr>
                     @endforeach
