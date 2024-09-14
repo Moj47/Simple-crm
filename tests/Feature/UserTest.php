@@ -54,7 +54,7 @@ class UserTest extends TestCase
         $user=User::factory()->create();
         $this->actingAs($user)->delete(route('users.destroy',$user1))->assertStatus(403);
         $this->actingAs($user)->get(route('users.edit',$user1))->assertStatus(403);
-        // $this->actingAs($user)->delete(route('projects.force-delete',$user1))->assertStatus(403);
+        $this->actingAs($user)->delete(route('users.force-delete',$user1))->assertStatus(403);
         $this->actingAs($user)->get(route('users.create'))->assertStatus(403);
 
 
@@ -69,7 +69,20 @@ class UserTest extends TestCase
             'name'=>$data->name,
             'phone_number'=>$data->phone_number
         ]);
+    }
+    public function testRestoreDeletedUser()
+    {
+        $user=User::factory()->create(['type'=>'admin']);
+        $deletedUser=User::factory()->create(['deleted_at'=>date(now())]);
 
-
+        $this->assertSoftDeleted('users',$deletedUser->toArray());
+        $this->actingAs($user)
+        ->post(route('users.restore',$deletedUser))
+        ->assertRedirect();
+        $this->assertDatabaseHas('users',[
+            'name'=>$deletedUser->name,
+            'email'=>$deletedUser->email,
+            'phone_number'=>$deletedUser->phone_number
+        ]);
     }
 }
