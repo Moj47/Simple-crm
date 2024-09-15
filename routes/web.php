@@ -20,7 +20,8 @@ Route::group(['middleware'=>['auth',Verifyemail::class]],function(){
     Route::delete('projects/delete/{id}',[ProjectController::class,'forcedelete'])->name('projects.force-delete');
 
     Route::resource('clients',ClientController::class);
-
+    Route::post('clients/restore/{id}',[ClientController::class,'restore'])->name('clients.restore');
+    Route::delete('clients/delete/{id}',[ClientController::class,'forcedelete'])->name('clients.force-delete');
     Route::resource('tasks',TaskController::class);
 
     Route::resource('users',UserController::class);

@@ -1,12 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+use App\Models\Client;
+$client=Client::factory()->make();
+@endphp
+
+@can('createClient',$client)
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
+
             <a class="btn btn-success" href="{{ route('clients.create') }}">
                 Create client
             </a>
         </div>
+        @endcan
     </div>
 
     <div class="card">
@@ -18,7 +26,17 @@
                     {{ session('status') }}
                 </div>
             @endif
-
+            <div class="d-flex justify-content-end">
+                <form action="{{ route('clients.index') }}" method="GET">
+                    <div class="form-group">
+                        <label for="deleted" class="col-form-label">Show deleted:</label>
+                        <select class="form-control" name="deleted" id="deleted" onchange="this.form.submit()">
+                            <option value="false" {{ request('deleted') == 'false' ? 'selected' : '' }}>No</option>
+                            <option value="true" {{ request('deleted') == 'true' ? 'selected' : '' }}>Yes</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
             <table class="table table-responsive-sm table-striped">
                 <thead>
                 <tr>
@@ -37,16 +55,38 @@
                         <td>{{ $client->phone }}</td>
                         <td>{{ $client->address }}</td>
                         <td>
+                            @can('editClient',$client)
+
                             <a class="btn btn-xs btn-info" href="{{ route('clients.edit', $client) }}">
                                 Edit
                             </a>
-                            @can('delete')
-                                <form action="{{ route('clients.destroy', $client) }}" method="POST" onsubmit="return confirm('Are your sure?');" style="display: inline-block;">
+                            @endcan
+                            @can('deleteclient', $client)
+                                    @if ($client->deleted_at == null)
+
+                                    <form action="{{ route('clients.destroy', $client) }}" method="POST"
+                                    onsubmit="return confirm('Are your sure?');" style="display: inline-block;">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                     <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                                    @else
+                                    <form action="{{ route('clients.force-delete', $client->id) }}" method="POST"
+                                    onsubmit="return confirm('Are your sure?');" style="display: inline-block;">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                                    @endif
                                 </form>
-                            @endcan
+                                @endcan
+                                @if ($client->deleted_at != null)
+                                @can('restoreClient', $client)
+                                <form action="{{ route('clients.restore', $client->id) }}" method="POST"
+                                    onsubmit="return confirm('Are your sure?');" style="display: inline-block;">
+                                    @csrf
+                                    <input type="submit" class="btn btn-xs btn-warning" value="Restore">
+                                </form>
+                                @endcan
+                                @endif
                         </td>
                     </tr>
                 @endforeach
