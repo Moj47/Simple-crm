@@ -13,11 +13,22 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tasks=Task::paginate(10);
-        return view('tasks.index')
-        ->with('tasks',$tasks);
+        $filter=$request->get('status');
+        if($filter==null ||$filter=='all')
+        {
+            $tasks=Task::paginate(10);
+            return view('tasks.index')
+            ->with('tasks',$tasks);
+        }
+        if($filter=='deleted')
+        {
+            $tasks=Task::onlyTrashed()->paginate(10);
+            return view('tasks.index')
+            ->with('tasks',$tasks);
+        }
+
     }
 
     /**
@@ -25,6 +36,9 @@ class TaskController extends Controller
      */
     public function create()
     {
+        $task=Task::factory()->make();
+
+        $this->authorize('createtask',$task);
         $users=User::all();
         $clients=Client::all();
         $projects=Project::all();
@@ -39,6 +53,8 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        $task=Task::factory()->make();
+        $this->authorize('createtask',$task);
        $request->validate([
         'name'=>'required|string',
         'description'=>'required|string',
@@ -66,6 +82,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
+        $this->authorize('edittask',$task);
         $users=User::all();
         $clients=Client::all();
         $projects=Project::all();
@@ -81,6 +98,7 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
+        $this->authorize('edittask',$task);
         $request->validate([
             'name'=>'required|string',
             'description'=>'required|string',
@@ -97,8 +115,16 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Task $task)
     {
-        //
+        $this->authorize('deleteTask',$task);
+        $task->delete();
+        return back();
+    }
+    public function forcedelete($id)
+    {
+        $task=Task::onlyTrashed()->findOrFail($id);
+        $this->authorize('deleteTask', $task);
+        return back();
     }
 }
