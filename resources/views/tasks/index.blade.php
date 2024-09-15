@@ -87,6 +87,13 @@ $task=Task::factory()->make();
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <input type="submit" class="btn btn-sm btn-danger" value="Delete">
                             </form>
+                            @can('restoreTask', $task)
+                            <form action="{{ route('clients.restore', $task->id) }}" method="POST"
+                                onsubmit="return confirm('Are your sure?');" style="display: inline-block;">
+                                @csrf
+                                <input type="submit" class="btn btn-sm btn-warning" value="Restore">
+                            </form>
+                            @endcan
                             @endif
                             @endcan
                         </td>

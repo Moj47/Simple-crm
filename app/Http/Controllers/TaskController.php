@@ -117,8 +117,14 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        $this->authorize('deleteTask',$task);
+        $this->authorize(ability: 'deleteTask',arguments: $task);
         $task->delete();
+        return back();
+    }
+    public function restore(Task $task)
+    {
+        $this->authorize(ability: 'restoreTask',arguments: $task);
+        $task->restore();
         return back();
     }
     public function forcedelete($id)

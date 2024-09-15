@@ -24,5 +24,9 @@ class TaskPolicy
     {
         return $user->type=='admin' ||$user->id==$task->user_id;
     }
+    public function restoreTask(User $user,Task $task)
+    {
+        return $user->type=='admin' ||$user->id==$task->user_id;
+    }
 
 }
